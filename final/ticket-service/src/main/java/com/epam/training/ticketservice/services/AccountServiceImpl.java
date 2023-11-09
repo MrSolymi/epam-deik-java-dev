@@ -11,10 +11,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AccServiceImpl implements AccService{
+public class AccountServiceImpl implements AccountService {
+
+
+    private final AccountRepository accountRepository;
+    private AccountDto loggedAcc = null;
     @Override
     public Optional<AccountDto> signIn(String username, String password) {
-        Optional<Account> acc = accountRepository.findByUsernameAndPassword(username, password);
+        Optional<Account> acc = accountRepository.findByUsername(username);
         if (acc.isEmpty()) {
             return Optional.empty();
         }
@@ -29,7 +33,7 @@ public class AccServiceImpl implements AccService{
 
     @Override
     public Optional<AccountDto> signInPrivileged(String username, String password) {
-        Optional<Account> acc = accountRepository.findByUsernameAndPassword(username, password);
+        Optional<Account> acc = accountRepository.findByUsername(username);
         if (acc.isEmpty()) {
             return Optional.empty();
         }
@@ -42,8 +46,6 @@ public class AccServiceImpl implements AccService{
         return describe();
     }
 
-    private final AccountRepository accountRepository;
-    private AccountDto loggedAcc = null;
     @Override
     public Optional<AccountDto> logOut() {
         Optional<AccountDto> previouslyLoggedAcc = describe();

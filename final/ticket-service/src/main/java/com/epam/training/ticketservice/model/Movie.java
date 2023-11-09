@@ -1,20 +1,30 @@
 package com.epam.training.ticketservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@AllArgsConstructor
+import javax.persistence.Entity;
+import javax.persistence.*;
+
 @NoArgsConstructor
 @Data
+@Entity
 public class Movie {
 
-    private String title, type;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String title;
+
+    private String type;
+
     private int length;
 
-    @Override
-    public String toString() {
-        return title + " (" + type + ", " + length + " minutes)";
+    public Movie(String title, String type, int length) {
+        this.title = title;
+        this.type = type;
+        this.length = length;
     }
+
 }

@@ -4,7 +4,7 @@ import com.epam.training.ticketservice.dto.AccountDto;
 
 import java.util.Optional;
 
-public interface AccService {
+public interface AccountService {
     Optional<AccountDto> signIn(String username, String password);
     Optional<AccountDto> signInPrivileged(String username, String password);
     Optional<AccountDto> logOut();

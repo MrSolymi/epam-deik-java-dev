@@ -2,7 +2,7 @@ package com.epam.training.ticketservice.commands;
 
 import com.epam.training.ticketservice.dto.AccountDto;
 import com.epam.training.ticketservice.model.AccountType;
-import com.epam.training.ticketservice.services.AccService;
+import com.epam.training.ticketservice.services.AccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -13,31 +13,31 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccountCommands {
 
-    private final AccService accService;
+    private final AccountService accountService;
     @ShellMethod(key = "sign in privileged", value = "Sign in privileged with <username> <password>")
     public String signInPrivileged(String userName, String password){
-        return accService.signInPrivileged(userName, password)
+        return accountService.signInPrivileged(userName, password)
                 .map(accountDto -> accountDto.username() + " is successfully logged in!")
                 .orElse("Login failed due to incorrect credentials");
     }
 
     @ShellMethod(key = "sign in", value = "Sign in with <username> <password>")
     public String signIn(String userName, String password){
-        return accService.signIn(userName, password)
+        return accountService.signIn(userName, password)
                 .map(accountDto -> accountDto.username() + " is successfully logged in!")
                 .orElse("Login failed due to incorrect credentials");
     }
 
     @ShellMethod(key = "sign out", value = "Sign out")
     public void signOut(){
-        accService.logOut()
+        accountService.logOut()
                 .map(accountDto -> accountDto.username() + " is logged out!")
                 .orElse("You need to login first!");
     }
 
     @ShellMethod(key = "describe account", value = "describe account")
     public String describeAccount(){
-        Optional<AccountDto> acc = accService.describe();
+        Optional<AccountDto> acc = accountService.describe();
         if (acc.isPresent() && acc.get().accountType() == AccountType.ADMIN){
             return "Signed in with privileged account '" + acc.get().username() + "'";
         }
@@ -53,10 +53,11 @@ public class AccountCommands {
     @ShellMethod(key = "sign up", value = "Sign up with <username> <password>")
     public String SignUp(String userName, String password) {
         try {
-            accService.signUp(userName, password);
+            accountService.signUp(userName, password);
             return "Registration was successful!";
         } catch (Exception e) {
             return "Registration failed!";
         }
     }
+
 }
