@@ -1,5 +1,5 @@
 package com.epam.training.ticketservice.model;
 
-public enum AccType {
+public enum AccountType {
     USER, ADMIN
 }
