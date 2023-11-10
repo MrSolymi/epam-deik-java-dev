@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.commands;
 
 import com.epam.training.ticketservice.dto.AccountDto;
 import com.epam.training.ticketservice.dto.RoomDto;
+import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
 import com.epam.training.ticketservice.model.AccountType;
 import com.epam.training.ticketservice.services.AccountService;
 import com.epam.training.ticketservice.services.RoomService;
@@ -22,7 +23,7 @@ public class RoomCommands {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create room", value = "Create room by <name> <rows> <columns>")
-    public String createRoom(String name, int rows, int columns){
+    public String createRoom(String name, int rows, int columns) throws AlreadyExistsException {
         RoomDto roomDto = new RoomDto(name, rows, columns);
         roomService.createRoom(roomDto);
         return String.format("Successfully created room '%s'", name);
@@ -46,6 +47,8 @@ public class RoomCommands {
     public String getRoomList(){
         StringBuilder sb = new StringBuilder();
         var list = roomService.getRoomList();
+        if (list.isEmpty())
+            return "There are no rooms at the moment";
         for (var item : list){
             sb.append(item).append("\n");
         }

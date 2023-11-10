@@ -1,6 +1,8 @@
 package com.epam.training.ticketservice.services;
 
 import com.epam.training.ticketservice.dto.MovieDto;
+import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
+import com.epam.training.ticketservice.exceptions.NotFoundException;
 import com.epam.training.ticketservice.model.Movie;
 import com.epam.training.ticketservice.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,32 +17,36 @@ public class MovieServiceImpl implements MovieService{
 
     private final MovieRepository movieRepository;
 
-    @Override
-    public void updateMovie(String title, String type, int length) {
-        Optional<Movie> movie = movieRepository.findByTitle(title);
-        if (movie.isEmpty())
-            return;
-        movie.get().setType(type);
-        movie.get().setLength(length);
-        movieRepository.save(movie.get());
-    }
+    private static final String MOVIE_AlREADY_EXIST = "The movie with the given title already exist!";
+    private static final String MOVIE_NOT_FOUND = "Movie with given title not found.";
 
     @Override
-    public void deleteMovie(String title) {
-        Optional<Movie> movie = movieRepository.deleteByTitle(title);
-        if (movie.isEmpty())
-            return;
-        movieRepository.deleteByTitle(title);
-    }
-
-    @Override
-    public void createMovie(MovieDto movieDto) {
+    public void createMovie(MovieDto movieDto) throws AlreadyExistsException {
+        if (movieRepository.findByTitle(movieDto.getTitle()).isPresent())
+            throw new AlreadyExistsException(MOVIE_AlREADY_EXIST);
         Movie movie = new Movie(
                 movieDto.getTitle(),
                 movieDto.getType(),
                 movieDto.getLength()
         );
         movieRepository.save(movie);
+    }
+    @Override
+    public void updateMovie(String title, String type, int length) throws NotFoundException {
+        Optional<Movie> movie = movieRepository.findByTitle(title);
+        if (movie.isEmpty())
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        movie.get().setType(type);
+        movie.get().setLength(length);
+        movieRepository.save(movie.get());
+    }
+
+    @Override
+    public void deleteMovie(String title) throws NotFoundException {
+        Optional<Movie> movie = movieRepository.findByTitle(title);
+        if (movie.isEmpty())
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        movieRepository.deleteByTitle(title);
     }
 
     @Override
