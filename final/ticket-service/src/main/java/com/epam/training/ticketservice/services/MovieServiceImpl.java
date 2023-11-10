@@ -16,11 +16,6 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository movieRepository;
 
     @Override
-    public List<MovieDto> getMovieList() {
-        return movieRepository.findAll().stream().map(MovieDto::new).toList();
-    }
-
-    @Override
     public void updateMovie(String title, String type, int length) {
         Optional<Movie> movie = movieRepository.findByTitle(title);
         if (movie.isEmpty())
@@ -46,5 +41,10 @@ public class MovieServiceImpl implements MovieService{
                 movieDto.getLength()
         );
         movieRepository.save(movie);
+    }
+
+    @Override
+    public List<MovieDto> getMovieList() {
+        return movieRepository.findAll().stream().map(MovieDto::new).toList();
     }
 }

@@ -11,12 +11,12 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
-import java.util.List;
 import java.util.Optional;
 
 @ShellComponent
 @RequiredArgsConstructor
 public class MovieCommands {
+
     private final AccountService accountService;
     private final MovieService movieService;
 
@@ -28,12 +28,14 @@ public class MovieCommands {
         return String.format("Successfully created movie '%s'", movieDto.getTitle());
     }
 
+    @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "update movie", value = "Update movie by <title> <type> <length in minutes>")
     public String updateMovie(String title, String type, int length){
         movieService.updateMovie(title, type, length);
         return String.format("Successfully updated movie '%s'", title);
     }
 
+    @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete movie", value = "Delete movie by <title>")
     public String deleteMovie(String title){
         movieService.deleteMovie(title);
@@ -45,8 +47,7 @@ public class MovieCommands {
         StringBuilder sb = new StringBuilder();
         var list = movieService.getMovieList();
         for (var item : list) {
-            sb.append(item);
-            sb.append("\n");
+            sb.append(item).append("\n");
         }
         sb.delete(sb.length()-1, sb.length());
         return sb.toString();

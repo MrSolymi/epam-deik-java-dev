@@ -12,8 +12,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
-
-
     private final AccountRepository accountRepository;
     private AccountDto loggedAcc = null;
     @Override

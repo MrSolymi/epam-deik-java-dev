@@ -1,19 +1,28 @@
 package com.epam.training.ticketservice.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import javax.persistence.*;
+
 @NoArgsConstructor
 @Data
+@Entity
 public class Room {
 
-    private String name;
-    private int numberOfRows, numberOfColumns;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Override
-    public String toString() {
-        return "Room " + name + " with " + numberOfRows * numberOfColumns + " seats, " + numberOfRows + " rows and " + numberOfColumns + " columns";
+    @Column(unique = true)
+    private String name;
+
+    private int numberOfRows;
+    private int numberOfColumns;
+
+    public Room(String name, int numberOfRows, int numberOfColumns) {
+        this.name = name;
+        this.numberOfRows = numberOfRows;
+        this.numberOfColumns = numberOfColumns;
     }
 }

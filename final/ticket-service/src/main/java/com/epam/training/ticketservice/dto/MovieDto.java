@@ -12,9 +12,9 @@ public class MovieDto {
     private final int length;
 
     public MovieDto (Movie movie){
-        this.title = movie.getTitle();
-        this.type = movie.getType();
-        this.length = movie.getLength();
+        title = movie.getTitle();
+        type = movie.getType();
+        length = movie.getLength();
     }
     @Override
     public String toString() {
