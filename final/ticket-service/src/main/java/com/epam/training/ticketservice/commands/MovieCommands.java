@@ -41,8 +41,15 @@ public class MovieCommands {
     }
 
     @ShellMethod(key = "list movies", value = "List movies")
-    public List<MovieDto> listMovies(){
-        return movieService.getMovieList();
+    public String listMovies(){
+        StringBuilder sb = new StringBuilder();
+        var list = movieService.getMovieList();
+        for (var item : list) {
+            sb.append(item);
+            sb.append("\n");
+        }
+        sb.delete(sb.length()-1, sb.length());
+        return sb.toString();
     }
 
     private Availability isAvailable() {
