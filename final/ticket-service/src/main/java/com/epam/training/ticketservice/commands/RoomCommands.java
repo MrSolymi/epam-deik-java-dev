@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.commands;
 import com.epam.training.ticketservice.dto.AccountDto;
 import com.epam.training.ticketservice.dto.RoomDto;
 import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
+import com.epam.training.ticketservice.exceptions.NotFoundException;
 import com.epam.training.ticketservice.model.AccountType;
 import com.epam.training.ticketservice.services.AccountService;
 import com.epam.training.ticketservice.services.RoomService;
@@ -31,14 +32,14 @@ public class RoomCommands {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "update room", value = "Update room by <name> <rows> <columns>")
-    public String updateRoom(String name, int rows, int columns){
+    public String updateRoom(String name, int rows, int columns) throws NotFoundException {
         roomService.updateRoom(name, rows, columns);
         return String.format("Successfully updated room '%s'", name);
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete room", value = "Delete room by <name>")
-    public String deleteRoom(String name){
+    public String deleteRoom(String name) throws NotFoundException {
         roomService.deleteRoom(name);
         return String.format("Successfully deleted room '%s'", name);
     }
