@@ -12,16 +12,17 @@ import javax.persistence.*;
 @Builder
 @Data
 @Entity
-@Table(name = "Account")
+@Table(name = "accounts")
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "username")
     private String username;
 
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)

@@ -4,20 +4,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
+@Table(name = "screenings")
 public class Screening {
 
-    private LocalDateTime date;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
-    @Override
-    public String toString() {
-        return movie + ", screened in room " + room.getName() + ", at " + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    @Column(name = "date")
+    private LocalDateTime date;
+
+    public Screening(Movie movie, Room room, LocalDateTime date){
+        this.movie = movie;
+        this.room = room;
+        this.date = date;
     }
+
 }
