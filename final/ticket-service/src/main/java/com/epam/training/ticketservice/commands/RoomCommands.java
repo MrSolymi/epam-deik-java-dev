@@ -25,8 +25,7 @@ public class RoomCommands {
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create room", value = "Create room by <name> <rows> <columns>")
     public String createRoom(String name, int rows, int columns) throws AlreadyExistsException {
-        RoomDto roomDto = new RoomDto(name, rows, columns);
-        roomService.createRoom(roomDto);
+        roomService.createRoom(name, rows, columns);
         return String.format("Successfully created room '%s'", name);
     }
 

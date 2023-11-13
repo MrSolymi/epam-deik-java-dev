@@ -21,14 +21,10 @@ public class RoomServiceImpl implements RoomService{
     private static final String ROOM_NOT_FOUND = "Room with given name not found.";
 
     @Override
-    public void createRoom(RoomDto roomDto) throws AlreadyExistsException {
-        if (roomRepository.findByName(roomDto.getName()).isPresent())
+    public void createRoom(String name, int rows, int columns) throws AlreadyExistsException {
+        if (roomRepository.findByName(name).isPresent())
             throw new AlreadyExistsException(ROOM_AlREADY_EXIST);
-        Room room = new Room(
-                roomDto.getName(),
-                roomDto.getNumberOfRows(),
-                roomDto.getNumberOfColumns()
-        );
+        Room room = new Room(name, rows, columns);
         roomRepository.save(room);
     }
 

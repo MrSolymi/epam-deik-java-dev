@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RoomService {
 
-    void createRoom(RoomDto roomDto) throws AlreadyExistsException;
+    void createRoom(String name, int rows, int columns) throws AlreadyExistsException;
     void updateRoom(String name, int numberOfRows, int numberOfColumns) throws NotFoundException;
     void deleteRoom(String name) throws NotFoundException;
     List<RoomDto> getRoomList();

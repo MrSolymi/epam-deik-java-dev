@@ -20,17 +20,15 @@ public class MovieServiceImpl implements MovieService{
     private static final String MOVIE_AlREADY_EXIST = "The movie with the given title already exist!";
     private static final String MOVIE_NOT_FOUND = "Movie with given title not found.";
 
+
     @Override
-    public void createMovie(MovieDto movieDto) throws AlreadyExistsException {
-        if (movieRepository.findByTitle(movieDto.getTitle()).isPresent())
+    public void createMovie(String title, String type, int length) throws AlreadyExistsException {
+        if (movieRepository.findByTitle(title).isPresent())
             throw new AlreadyExistsException(MOVIE_AlREADY_EXIST);
-        Movie movie = new Movie(
-                movieDto.getTitle(),
-                movieDto.getType(),
-                movieDto.getLength()
-        );
+        Movie movie = new Movie(title, type, length);
         movieRepository.save(movie);
     }
+
     @Override
     public void updateMovie(String title, String type, int length) throws NotFoundException {
         Optional<Movie> movie = movieRepository.findByTitle(title);

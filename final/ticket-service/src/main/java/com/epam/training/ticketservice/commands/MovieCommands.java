@@ -22,12 +22,12 @@ public class MovieCommands {
     private final AccountService accountService;
     private final MovieService movieService;
 
+
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create movie", value = "Create movie by <title> <type> <length in minutes>")
     public String createMovie(String title, String type, int length) throws AlreadyExistsException {
-        MovieDto movieDto = new MovieDto(title, type, length);
-        movieService.createMovie(movieDto);
-        return String.format("Successfully created movie '%s'", movieDto.getTitle());
+        movieService.createMovie(title, type, length);
+        return String.format("Successfully created movie '%s'", title);
     }
 
     @ShellMethodAvailability("isAvailable")
