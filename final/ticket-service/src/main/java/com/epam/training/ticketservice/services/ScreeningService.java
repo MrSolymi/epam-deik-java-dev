@@ -8,10 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ScreeningService {
-
     void createScreening(String title, String name, LocalDateTime dateTime) throws NotFoundException, ScreeningOverlappingException;
-
     void deleteScreening(String title, String name, LocalDateTime dateTime) throws NotFoundException;
-
     List<ScreeningDto> getScreeningList();
 }

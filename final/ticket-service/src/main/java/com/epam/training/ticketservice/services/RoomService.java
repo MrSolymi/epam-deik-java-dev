@@ -7,7 +7,6 @@ import com.epam.training.ticketservice.exceptions.NotFoundException;
 import java.util.List;
 
 public interface RoomService {
-
     void createRoom(String name, int rows, int columns) throws AlreadyExistsException;
     void updateRoom(String name, int numberOfRows, int numberOfColumns) throws NotFoundException;
     void deleteRoom(String name) throws NotFoundException;
