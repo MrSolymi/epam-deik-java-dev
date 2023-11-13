@@ -29,10 +29,9 @@ public class Screening {
     @Column(name = "date")
     private LocalDateTime date;
 
-    public Screening(Movie movie, Room room, LocalDateTime date){
+    public Screening(Movie movie, Room room, LocalDateTime date) {
         this.movie = movie;
         this.room = room;
         this.date = date;
     }
-
 }

@@ -23,6 +23,7 @@ public class ScreeningDto {
         date = screening.getDate();
     }
 
+
     @Override
     public String toString() {
         return movieDto + ", screened in room " + roomDto.getName() + ", at " + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

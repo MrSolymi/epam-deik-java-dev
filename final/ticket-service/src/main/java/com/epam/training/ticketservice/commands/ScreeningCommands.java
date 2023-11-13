@@ -4,6 +4,8 @@ import com.epam.training.ticketservice.dto.AccountDto;
 import com.epam.training.ticketservice.dto.MovieDto;
 import com.epam.training.ticketservice.dto.RoomDto;
 import com.epam.training.ticketservice.dto.ScreeningDto;
+import com.epam.training.ticketservice.exceptions.NotFoundException;
+import com.epam.training.ticketservice.exceptions.ScreeningOverlappingException;
 import com.epam.training.ticketservice.model.AccountType;
 import com.epam.training.ticketservice.model.Movie;
 import com.epam.training.ticketservice.services.AccountService;
@@ -28,17 +30,16 @@ public class ScreeningCommands {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create screening", value = "Create screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
-    public String createScreening(String movieTitle, String roomName, String startDate){
-        MovieDto movieDto = new MovieDto(movieTitle, "", 0);
-        RoomDto roomDto = new RoomDto(roomName, 0, 0);
-        screeningService.createScreening(movieDto, roomDto,LocalDateTime.parse(startDate, formatter));
+    public String createScreening(String movieTitle, String roomName, String startDate) throws NotFoundException, ScreeningOverlappingException {
+        screeningService.createScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
         return "Successfully created screening";
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete screening", value = "Delete screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
-    public String deleteScreening(String movieTitle, String roomName, String startDate){
-        return "Successfully created screening";
+    public String deleteScreening(String movieTitle, String roomName, String startDate) throws NotFoundException {
+        screeningService.deleteScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
+        return "Successfully deleted screening";
     }
 
     @ShellMethod(key = "list screenings", value = "List screenings")

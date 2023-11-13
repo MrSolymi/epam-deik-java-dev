@@ -36,13 +36,19 @@ public class InMemoryDataBaseInit {
             accountRepository.save(admin);
         }
 
-        Movie movie = new Movie("Helo", "action", 100);
+        Movie movie = new Movie("Helo", "action", 60);
         movieRepository.save(movie);
 
         Room room = new Room("Room1", 10, 10);
         roomRepository.save(room);
 
+
         Screening screening = new Screening(movie, room,  LocalDateTime.parse("2000-12-20 10:00", formatter));
-        //screeningRepository.save(screening);
+        screeningRepository.save(screening);
+        screening = new Screening(movie, room,  LocalDateTime.parse("2002-12-20 10:00", formatter));
+        screeningRepository.save(screening);
+        screening = new Screening(movie, room,  LocalDateTime.parse("2004-12-20 10:00", formatter));
+        screeningRepository.save(screening);
+
     }
 }

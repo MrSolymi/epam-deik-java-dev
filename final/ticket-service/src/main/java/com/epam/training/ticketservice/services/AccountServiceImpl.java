@@ -20,7 +20,7 @@ public class AccountServiceImpl implements AccountService {
         if (acc.isEmpty()) {
             return Optional.empty();
         }
-        if (AccountType.USER == acc.get().getAccountType()) {
+        if (AccountType.USER == acc.get().getAccountType() && acc.get().getPassword().equals(password)) {
             loggedAcc = new AccountDto(acc.get().getUsername(), acc.get().getAccountType());
         }
         else {
@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
         if (acc.isEmpty()) {
             return Optional.empty();
         }
-        if (AccountType.ADMIN == acc.get().getAccountType()) {
+        if (AccountType.ADMIN == acc.get().getAccountType() && acc.get().getPassword().equals(password)) {
             loggedAcc = new AccountDto(acc.get().getUsername(), acc.get().getAccountType());
         }
         else {
