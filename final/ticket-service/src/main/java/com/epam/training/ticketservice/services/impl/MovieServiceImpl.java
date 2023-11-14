@@ -1,10 +1,11 @@
-package com.epam.training.ticketservice.services;
+package com.epam.training.ticketservice.services.impl;
 
 import com.epam.training.ticketservice.dto.MovieDto;
 import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
 import com.epam.training.ticketservice.exceptions.NotFoundException;
 import com.epam.training.ticketservice.model.Movie;
 import com.epam.training.ticketservice.repositories.MovieRepository;
+import com.epam.training.ticketservice.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MovieServiceImpl implements MovieService{
+public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
 

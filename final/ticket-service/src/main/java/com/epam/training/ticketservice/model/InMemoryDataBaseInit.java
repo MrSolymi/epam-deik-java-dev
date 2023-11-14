@@ -27,6 +27,7 @@ public class InMemoryDataBaseInit {
     private boolean initAdmin;
     @PostConstruct
     public void init(){
+
         if (initAdmin){
             Account admin = Account.builder()
                     .username("admin")
@@ -36,19 +37,22 @@ public class InMemoryDataBaseInit {
             accountRepository.save(admin);
         }
 
-        Movie movie = new Movie("Helo", "action", 60);
+        Account user = Account.builder()
+                .username("user")
+                .password("user")
+                .accountType(AccountType.USER)
+                .build();
+        accountRepository.save(user);
+
+        Movie movie = new Movie("Sátántangó", "action", 120);
         movieRepository.save(movie);
 
-        Room room = new Room("Room1", 10, 10);
+        Room room = new Room("Pedersoli", 20, 15);
         roomRepository.save(room);
 
-
-        Screening screening = new Screening(movie, room,  LocalDateTime.parse("2000-12-20 10:00", formatter));
-        screeningRepository.save(screening);
-        screening = new Screening(movie, room,  LocalDateTime.parse("2002-12-20 10:00", formatter));
-        screeningRepository.save(screening);
-        screening = new Screening(movie, room,  LocalDateTime.parse("2004-12-20 10:00", formatter));
+        Screening screening = new Screening(movie, room,  LocalDateTime.parse("2021-03-15 10:45", formatter));
         screeningRepository.save(screening);
 
+        // book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
     }
 }

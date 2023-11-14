@@ -1,9 +1,10 @@
-package com.epam.training.ticketservice.services;
+package com.epam.training.ticketservice.services.impl;
 
 import com.epam.training.ticketservice.dto.AccountDto;
 import com.epam.training.ticketservice.model.Account;
 import com.epam.training.ticketservice.model.AccountType;
 import com.epam.training.ticketservice.repositories.AccountRepository;
+import com.epam.training.ticketservice.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

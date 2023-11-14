@@ -1,10 +1,11 @@
-package com.epam.training.ticketservice.services;
+package com.epam.training.ticketservice.services.impl;
 
 import com.epam.training.ticketservice.dto.RoomDto;
 import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
 import com.epam.training.ticketservice.exceptions.NotFoundException;
 import com.epam.training.ticketservice.model.Room;
 import com.epam.training.ticketservice.repositories.RoomRepository;
+import com.epam.training.ticketservice.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class RoomServiceImpl implements RoomService{
+public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
 

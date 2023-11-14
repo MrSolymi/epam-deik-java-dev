@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.services;
+package com.epam.training.ticketservice.services.impl;
 
 import com.epam.training.ticketservice.dto.ScreeningDto;
 import com.epam.training.ticketservice.exceptions.NotFoundException;
@@ -7,6 +7,7 @@ import com.epam.training.ticketservice.model.Screening;
 import com.epam.training.ticketservice.repositories.MovieRepository;
 import com.epam.training.ticketservice.repositories.RoomRepository;
 import com.epam.training.ticketservice.repositories.ScreeningRepository;
+import com.epam.training.ticketservice.services.ScreeningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScreeningServiceImpl implements ScreeningService{
+public class ScreeningServiceImpl implements ScreeningService {
     private static final String SCREENING_NOT_FOUND = "Screening not found.";
     private static final String SCREENING_STARTS_IN_BREAK = "This would start in the break period after another screening in this room";
     private static final String SCREENINGS_OVERLAPPING = "There is an overlapping screening";

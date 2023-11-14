@@ -1,12 +1,15 @@
 package com.epam.training.ticketservice.commands;
 
 import com.epam.training.ticketservice.dto.AccountDto;
+import com.epam.training.ticketservice.dto.BookingDto;
 import com.epam.training.ticketservice.model.AccountType;
 import com.epam.training.ticketservice.services.AccountService;
+import com.epam.training.ticketservice.services.BookingService;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+import java.util.List;
 import java.util.Optional;
 
 @ShellComponent
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class AccountCommands {
 
     private final AccountService accountService;
+    private final BookingService bookingService;
     @ShellMethod(key = "sign in privileged", value = "Sign in privileged with <username> <password>")
     public String signInPrivileged(String userName, String password){
         return accountService.signInPrivileged(userName, password)
@@ -42,7 +46,18 @@ public class AccountCommands {
             return "Signed in with privileged account '" + acc.get().username() + "'";
         }
         else if (acc.isPresent() && acc.get().accountType() == AccountType.USER){
-            return "Signed in with account '" +acc.get().username() + "'";
+            StringBuilder sb = new StringBuilder();
+            sb.append("Signed in with account '" +acc.get().username() + "'").append("\n");
+            List<BookingDto> bookingList = bookingService.getBookingsList();
+            if (bookingList.isEmpty())
+                sb.append("You have not booked any tickets yet");
+            else {
+                for (var item : bookingList){
+                    sb.append(item).append("\n");
+                }
+                sb.delete(sb.length()-1, sb.length());
+            }
+            return sb.toString();
         }
         else
         {
