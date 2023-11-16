@@ -6,14 +6,19 @@ import com.epam.training.ticketservice.model.Screening;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, Long> {
-    Optional<Screening> findScreeningByMovieAndRoomAndDate(Movie movie, Room room, LocalDateTime date);
-    List<Screening> findAllByRoom(Room room);
+    boolean existsByMovie_TitleAndRoom_Name(String movieTitle, String roomName);
 
+    @Transactional
+    void deleteByMovie_TitleAndRoom_Name(String movieTitle, String roomName);
 
+    Optional<Screening> findScreeningByMovieAndRoomAndDate(Movie movie, Room room, LocalDateTime startTime);
+
+    List<Screening> findAllByRoom_Name(String roomName);
 }

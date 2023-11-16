@@ -30,14 +30,14 @@ public class ScreeningCommands {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create screening", value = "Create screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
-    public String createScreening(String movieTitle, String roomName, String startDate) throws NotFoundException, ScreeningOverlappingException {
+    public void createScreening(String movieTitle, String roomName, String startDate){
         screeningService.createScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
-        return "Successfully created screening";
     }
+
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete screening", value = "Delete screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
-    public String deleteScreening(String movieTitle, String roomName, String startDate) throws NotFoundException {
+    public String deleteScreening(String movieTitle, String roomName, String startDate) {
         screeningService.deleteScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
         return "Successfully deleted screening";
     }

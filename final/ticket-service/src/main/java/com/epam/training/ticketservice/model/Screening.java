@@ -26,7 +26,6 @@ public class Screening {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
-    @Column(name = "date")
     private LocalDateTime date;
 
     public Screening(Movie movie, Room room, LocalDateTime date) {

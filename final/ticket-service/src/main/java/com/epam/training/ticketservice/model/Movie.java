@@ -15,13 +15,11 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, name = "title")
+    @Column(unique = true)
     private String title;
 
-    @Column(name = "type")
     private String type;
 
-    @Column(name = "length")
     private int length;
 
     public Movie(String title, String type, int length) {
