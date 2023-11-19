@@ -4,12 +4,14 @@ import com.epam.training.ticketservice.repositories.AccountRepository;
 import com.epam.training.ticketservice.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
 @RequiredArgsConstructor
+@Profile(value = "ci")
 public class InMemoryDataBaseInit {
 
     private final AccountRepository accountRepository;
@@ -19,10 +21,10 @@ public class InMemoryDataBaseInit {
     private boolean initAdmin;
 
     @PostConstruct
-    public void init(){
+    public void init() {
 
         if (initAdmin) {
-            if (accountRepository.findByUsername("admin").isEmpty()){
+            if (accountRepository.findByUsername("admin").isEmpty()) {
                 Account admin = new Account("admin", "admin", AccountType.ADMIN);
                 accountRepository.save(admin);
             }

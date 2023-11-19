@@ -13,12 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, Long> {
-    boolean existsByMovie_TitleAndRoom_Name(String movieTitle, String roomName);
-
     @Transactional
     void deleteByMovie_TitleAndRoom_Name(String movieTitle, String roomName);
 
     Optional<Screening> findScreeningByMovieAndRoomAndDate(Movie movie, Room room, LocalDateTime startTime);
 
-    List<Screening> findAllByRoom_Name(String roomName);
+    List<Screening> findAllByRoom(Room room);
 }

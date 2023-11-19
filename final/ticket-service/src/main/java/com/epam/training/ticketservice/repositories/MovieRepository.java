@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Transactional
-    Optional<Movie> deleteByTitle(String title);
+    void deleteByTitle(String title);
 
     Optional<Movie> findByTitle(String title);
 }

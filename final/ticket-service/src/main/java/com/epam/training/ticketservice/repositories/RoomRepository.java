@@ -12,5 +12,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByName(String name);
 
     @Transactional
-    Optional<Room> deleteByName(String name);
+    void deleteByName(String name);
 }

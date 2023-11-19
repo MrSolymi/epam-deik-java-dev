@@ -5,34 +5,28 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "accounts")
 @Data
 @NoArgsConstructor
-public class Account {
+@Table(name = "components")
+public class PriceComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String componentName;
 
-    private String password;
+    private int componentValue;
 
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
-    public Account(String username, String password, AccountType accountType) {
-        this.username = username;
-        this.password = password;
-        this.accountType = accountType;
+    public PriceComponent(String componentName, int componentValue) {
+        this.componentName = componentName;
+        this.componentValue = componentValue;
     }
 }

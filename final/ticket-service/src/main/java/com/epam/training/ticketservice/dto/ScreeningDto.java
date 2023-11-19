@@ -1,7 +1,5 @@
 package com.epam.training.ticketservice.dto;
 
-import com.epam.training.ticketservice.model.Movie;
-import com.epam.training.ticketservice.model.Room;
 import com.epam.training.ticketservice.model.Screening;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,10 @@ public class ScreeningDto {
 
     @Override
     public String toString() {
-        return movieDto + ", screened in room " + roomDto.getName() + ", at " + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return movieDto
+                + ", screened in room "
+                + roomDto.getName()
+                + ", at "
+                + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

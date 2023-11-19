@@ -14,8 +14,8 @@ import java.util.concurrent.TimeoutException;
 
 public class ProcessUnderTest implements AutoCloseable {
 
-    private static final int JVM_STARTUP_FAILURE_WAIT_TIME = 150;
-    private static final int DELAY_BEFORE_CLEANING_PROCESS_OUTPUT = 1000;
+    private static final int JVM_STARTUP_FAILURE_WAIT_TIME = 30;
+    private static final int DELAY_BEFORE_CLEANING_PROCESS_OUTPUT = 60;
 
     private Process process;
     private BufferedReader output;

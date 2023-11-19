@@ -15,16 +15,16 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
+    private static final String ROOM_AlREADY_EXIST = "The room with the given name already exist";
+    private static final String ROOM_NOT_FOUND = "The room with given the name not found";
 
     private final RoomRepository roomRepository;
 
-    private static final String ROOM_AlREADY_EXIST = "The room with the given name already exist!";
-    private static final String ROOM_NOT_FOUND = "Room with given name not found.";
-
     @Override
     public void createRoom(String name, int rows, int columns) throws AlreadyExistsException {
-        if (roomRepository.findByName(name).isPresent())
+        if (roomRepository.findByName(name).isPresent()) {
             throw new AlreadyExistsException(ROOM_AlREADY_EXIST);
+        }
         Room room = new Room(name, rows, columns);
         roomRepository.save(room);
     }
@@ -32,8 +32,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void updateRoom(String name, int numberOfRows, int numberOfColumns) throws NotFoundException {
         Optional<Room> room = roomRepository.findByName(name);
-        if (room.isEmpty())
+        if (room.isEmpty()) {
             throw new NotFoundException(ROOM_NOT_FOUND);
+        }
         room.get().setNumberOfRows(numberOfRows);
         room.get().setNumberOfColumns(numberOfColumns);
         roomRepository.save(room.get());
@@ -42,8 +43,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteRoom(String name) throws NotFoundException {
         Optional<Room> room = roomRepository.findByName(name);
-        if (room.isEmpty())
+        if (room.isEmpty()) {
             throw new NotFoundException(ROOM_NOT_FOUND);
+        }
         roomRepository.deleteByName(name);
     }
 

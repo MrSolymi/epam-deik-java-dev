@@ -1,13 +1,7 @@
 package com.epam.training.ticketservice.commands;
 
 import com.epam.training.ticketservice.dto.AccountDto;
-import com.epam.training.ticketservice.dto.MovieDto;
-import com.epam.training.ticketservice.dto.RoomDto;
-import com.epam.training.ticketservice.dto.ScreeningDto;
-import com.epam.training.ticketservice.exceptions.NotFoundException;
-import com.epam.training.ticketservice.exceptions.ScreeningOverlappingException;
 import com.epam.training.ticketservice.model.AccountType;
-import com.epam.training.ticketservice.model.Movie;
 import com.epam.training.ticketservice.services.AccountService;
 import com.epam.training.ticketservice.services.ScreeningService;
 import lombok.RequiredArgsConstructor;
@@ -29,29 +23,40 @@ public class ScreeningCommands {
     private final ScreeningService screeningService;
 
     @ShellMethodAvailability("isAvailable")
-    @ShellMethod(key = "create screening", value = "Create screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
-    public void createScreening(String movieTitle, String roomName, String startDate){
-        screeningService.createScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
+    @ShellMethod(key = "create screening",
+            value = "Create screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
+    public String createScreening(String movieTitle, String roomName, String startDate) {
+        try {
+            screeningService.createScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "Successfully created screening";
     }
 
-
     @ShellMethodAvailability("isAvailable")
-    @ShellMethod(key = "delete screening", value = "Delete screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
+    @ShellMethod(key = "delete screening",
+            value = "Delete screening by <movie title> <room name> <starting date in YYYY-MM-DD hh:mm format>")
     public String deleteScreening(String movieTitle, String roomName, String startDate) {
-        screeningService.deleteScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
+        try {
+            screeningService.deleteScreening(movieTitle, roomName, LocalDateTime.parse(startDate, formatter));
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "Successfully deleted screening";
     }
 
     @ShellMethod(key = "list screenings", value = "List screenings")
-    public String getScreeningList(){
+    public String getScreeningList() {
         StringBuilder sb = new StringBuilder();
         var list = screeningService.getScreeningList();
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return "There are no screenings";
-        for (var item : list){
+        }
+        for (var item : list) {
             sb.append(item).append("\n");
         }
-        sb.delete(sb.length()-1, sb.length());
+        sb.delete(sb.length() - 1, sb.length());
         return sb.toString();
     }
 

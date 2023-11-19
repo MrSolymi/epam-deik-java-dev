@@ -24,35 +24,48 @@ public class RoomCommands {
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "create room", value = "Create room by <name> <rows> <columns>")
-    public String createRoom(String name, int rows, int columns) throws AlreadyExistsException {
-        roomService.createRoom(name, rows, columns);
-        return String.format("Successfully created room '%s'", name);
+    public String createRoom(String name, int rows, int columns) {
+        try {
+            roomService.createRoom(name, rows, columns);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "Successfully created room " + name;
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "update room", value = "Update room by <name> <rows> <columns>")
-    public String updateRoom(String name, int rows, int columns) throws NotFoundException {
-        roomService.updateRoom(name, rows, columns);
-        return String.format("Successfully updated room '%s'", name);
+    public String updateRoom(String name, int rows, int columns) {
+        try {
+            roomService.updateRoom(name, rows, columns);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "Successfully updated room " + name;
     }
 
     @ShellMethodAvailability("isAvailable")
     @ShellMethod(key = "delete room", value = "Delete room by <name>")
-    public String deleteRoom(String name) throws NotFoundException {
-        roomService.deleteRoom(name);
-        return String.format("Successfully deleted room '%s'", name);
+    public String deleteRoom(String name) {
+        try {
+            roomService.deleteRoom(name);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "Successfully deleted room " + name;
     }
 
     @ShellMethod(key = "list rooms", value = "List rooms")
-    public String getRoomList(){
+    public String getRoomList() {
         StringBuilder sb = new StringBuilder();
         var list = roomService.getRoomList();
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return "There are no rooms at the moment";
-        for (var item : list){
+        }
+        for (var item : list) {
             sb.append(item).append("\n");
         }
-        sb.delete(sb.length()-1, sb.length());
+        sb.delete(sb.length() - 1, sb.length());
         return sb.toString();
     }
 
@@ -60,6 +73,6 @@ public class RoomCommands {
         Optional<AccountDto> user = accountService.describe();
         return user.isPresent() && user.get().accountType() == AccountType.ADMIN
                 ? Availability.available()
-                : Availability.unavailable("You are not an admin!");
+                : Availability.unavailable("You are not an admin");
     }
 }
