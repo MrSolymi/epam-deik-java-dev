@@ -40,17 +40,10 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         Optional<PriceComponent> component = priceComponentRepository.findByComponentName(componentName);
         if (component.isPresent()) {
             throw new AlreadyExistsException(COMPONENT_ALREADY_EXISTS);
+        } else {
+            priceComponentRepository.save(new PriceComponent(componentName, componentValue));
         }
-        for (var item : priceComponentRepository.findAll()) {
-            System.out.println(item);
-        }
-        priceComponentRepository.save(PriceComponent.builder()
-                        .componentName(componentName)
-                        .componentValue(componentValue)
-                        .build());
-        for (var item : priceComponentRepository.findAll()) {
-            System.out.println(item);
-        }
+
     }
 
     @Override
@@ -82,19 +75,16 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         if (component.isEmpty()) {
             throw new NotFoundException(PRICE_COMPONENT_NOT_FOUND);
         } else {
-            Optional<Movie> movie = movieRepository.findByTitle(movieTitle);
-            if (movie.isEmpty()) {
-                throw new NotFoundException(MOVIE_NOT_FOUND);
-            }
-
-            List<Movie> movies = component.get().getMovies();
+            var priceComponent = component.get();
+            List<Movie> movies = priceComponent.getMovies();
             if (movies == null) {
                 movies = new ArrayList<>();
             }
-            movies.add(movie.get());
-            component.get().setMovies(movies);
+            movies.add(movieRepository.findByTitle(movieTitle).get());
 
-            priceComponentRepository.save(component.get());
+            priceComponent.setMovies(movies);
+
+            priceComponentRepository.save(priceComponent);
         }
 
     }
@@ -107,8 +97,7 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         Optional<PriceComponent> component = priceComponentRepository.findByComponentName(componentName);
         if (component.isEmpty()) {
             throw new NotFoundException(PRICE_COMPONENT_NOT_FOUND);
-        }
-        else {
+        } else {
             Optional<Movie> movie = movieRepository.findByTitle(movieTitle);
             if (movie.isEmpty()) {
                 throw new NotFoundException(MOVIE_NOT_FOUND);

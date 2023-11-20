@@ -7,45 +7,49 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import java.util.List;
 
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "components")
+@Data
 @Entity
+@Builder
 public class PriceComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     private String componentName;
 
-    private int componentValue = 1500;
+    @Column(name = "price")
+    private int componentValue;
 
     @OneToMany()
-    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    @JoinTable(name = "price_component_rooms",
+            joinColumns = @JoinColumn(name = "price_component_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id"))
     private List<Room> rooms;
 
     @OneToMany()
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JoinTable(name = "price_component_movies",
+            joinColumns = @JoinColumn(name = "price_component_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private List<Movie> movies;
 
     @OneToMany()
-    @JoinColumn(name = "screening_id", referencedColumnName = "id")
+    @JoinTable(name = "price_component_screenings",
+            joinColumns = @JoinColumn(name = "price_component_id"),
+            inverseJoinColumns = @JoinColumn(name = "screening_id"))
     private List<Screening> screenings;
 
     public PriceComponent(String componentName, int componentValue) {

@@ -36,6 +36,7 @@ public class InMemoryDataBaseInit {
             }
         }
 
+        /*
         Movie movie = new Movie("Sátántangó", "drama", 450);
         Movie movie1 = new Movie("Spirited Away", "aminmation", 125);
         Movie movie2 = new Movie("Pulp Fiction", "drama", 154);
@@ -55,6 +56,7 @@ public class InMemoryDataBaseInit {
         screeningRepository.save(screening);
         screeningRepository.save(screening1);
         screeningRepository.save(screening2);
+         */
 
 
     }
