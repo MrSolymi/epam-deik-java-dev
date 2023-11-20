@@ -17,4 +17,9 @@ public interface BookingService {
     ) throws NotFoundException, SeatAlreadyTakenException;
 
     List<BookingDto> getBookingList(AccountDto accountDto) throws NotFoundException;
+
+    int getPrice(String movieTitle,
+                 String roomName,
+                 LocalDateTime startDate,
+                 String seatListString) throws NotFoundException;
 }

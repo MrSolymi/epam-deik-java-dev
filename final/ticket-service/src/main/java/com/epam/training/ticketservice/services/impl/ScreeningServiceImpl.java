@@ -37,11 +37,11 @@ public class ScreeningServiceImpl implements ScreeningService {
                                 LocalDateTime dateTime) throws ScreeningOverlappingException, NotFoundException {
         var movie = movieRepository.findByTitle(title);
         if (movie.isEmpty()) {
-            throw new NotFoundException(SCREENING_NOT_FOUND);
+            throw new NotFoundException(MOVIE_NOT_FOUND);
         }
         var room = roomRepository.findByName(name);
         if (room.isEmpty()) {
-            throw new NotFoundException(SCREENING_NOT_FOUND);
+            throw new NotFoundException(ROOM_NOT_FOUND);
         }
         Screening screening = new Screening(
                 movie.get(),

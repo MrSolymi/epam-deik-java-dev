@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.services.impl;
 
 import com.epam.training.ticketservice.dto.AccountDto;
+import com.epam.training.ticketservice.exceptions.AccountLeftSignedIn;
 import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
 import com.epam.training.ticketservice.model.Account;
 import com.epam.training.ticketservice.model.AccountType;
@@ -20,7 +21,10 @@ public class AccountServiceImpl implements AccountService {
     private AccountDto loggedAcc = null;
 
     @Override
-    public Optional<AccountDto> signIn(String username, String password) {
+    public Optional<AccountDto> signIn(String username, String password) throws AccountLeftSignedIn {
+        if (loggedAcc != null) {
+            throw new AccountLeftSignedIn("Sign out first to sign into an another account");
+        }
         Optional<Account> user = accountRepository.findByUsername(username);
         if (user.isEmpty()) {
             return Optional.empty();
@@ -34,7 +38,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountDto> signInPrivileged(String username, String password) {
+    public Optional<AccountDto> signInPrivileged(String username, String password) throws AccountLeftSignedIn {
+        if (loggedAcc != null) {
+            throw new AccountLeftSignedIn("Sign out first to sign into an another account");
+        }
         Optional<Account> acc = accountRepository.findByUsername(username);
         if (acc.isEmpty()) {
             return Optional.empty();

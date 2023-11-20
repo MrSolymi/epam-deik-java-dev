@@ -1,5 +1,7 @@
 package com.epam.training.ticketservice.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.awt.print.Book;
 import java.util.List;
 
 @NoArgsConstructor
@@ -41,5 +44,11 @@ public class Booking {
         this.account = account;
         this.screening = screening;
         this.seats = seats;
+    }
+
+    public Booking(Screening screening, List<Seat> seats, int price) {
+        this.screening = screening;
+        this.seats = seats;
+        this.price = price;
     }
 }

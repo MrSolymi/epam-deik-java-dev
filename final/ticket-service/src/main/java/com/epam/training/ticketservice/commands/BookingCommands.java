@@ -39,6 +39,7 @@ public class BookingCommands {
         } catch (Exception e) {
             return e.getMessage();
         }
-        return bookingService.getBookingList(accountDto.get()).getLast().toStringBooked();
+        return bookingService.getBookingList(accountDto.get())
+                .get(bookingService.getBookingList(accountDto.get()).size() - 1).toStringBooked();
     }
 }

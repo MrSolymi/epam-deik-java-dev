@@ -22,16 +22,25 @@ public class AccountCommands {
 
     @ShellMethod(key = "sign in privileged", value = "Sign in privileged with <username> <password>")
     public String signInPrivileged(String userName, String password) {
-        return accountService.signInPrivileged(userName, password)
-                .map(accountDto -> accountDto.username() + " is successfully logged in")
-                .orElse("Login failed due to incorrect credentials");
+        try {
+            return accountService.signInPrivileged(userName, password)
+                    .map(accountDto -> accountDto.username() + " is successfully logged in")
+                    .orElse("Login failed due to incorrect credentials");
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethod(key = "sign in", value = "Sign in with <username> <password>")
     public String signIn(String userName, String password) {
-        return accountService.signIn(userName, password)
-                .map(accountDto -> accountDto.username() + " is successfully logged in")
-                .orElse("Login failed due to incorrect credentials");
+        try {
+            return accountService.signIn(userName, password)
+                    .map(accountDto -> accountDto.username() + " is successfully logged in")
+                    .orElse("Login failed due to incorrect credentials");
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 
     @ShellMethod(key = "sign out", value = "Sign out")

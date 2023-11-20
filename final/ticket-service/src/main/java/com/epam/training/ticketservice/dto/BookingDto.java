@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.dto;
 
 import com.epam.training.ticketservice.model.Booking;
 import com.epam.training.ticketservice.model.Seat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,24 +12,28 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
+@Builder
 public class BookingDto {
     private final AccountDto accountDto;
     private final ScreeningDto screeningDto;
     private final List<Seat> seats;
-
-    private int basePrice = 1500;
-    private StringBuilder sb = new StringBuilder();
-    private List<String> seatList = new ArrayList<>();
+    private final int price;
 
     public BookingDto(Booking booking) {
         accountDto = new AccountDto(booking.getAccount().getUsername(), booking.getAccount().getAccountType());
         screeningDto = new ScreeningDto(booking.getScreening());
         seats = booking.getSeats();
+        price = booking.getPrice();
     }
 
     @Override
     public String toString() {
-        int price = calcPrize(seats.size());
+        StringBuilder sb = new StringBuilder();
+        List<String> seatList = new ArrayList<>();
+
+        seats.forEach(x -> seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
+
+
 
         return sb.append("Seats ").append(String.join(", ", seatList))
                 .append(" on ").append(screeningDto.getMovieDto().getTitle())
@@ -41,17 +46,15 @@ public class BookingDto {
     }
 
     public String toStringBooked() {
-        int price = calcPrize(seats.size());
+        List<String> seatList = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        seats.forEach(x -> seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
 
         return sb.append("Seats booked: ").append(String.join(", ", seatList))
                 .append("; the price for this booking is ")
                 .append(price)
                 .append(" HUF")
                 .toString();
-    }
-
-    private int calcPrize(int numberOfSeats) {
-        seats.forEach(x -> seatList.add(String.format("(%d,%d)", x.getRowIndex(), x.getColumnIndex())));
-        return numberOfSeats * basePrice;
     }
 }
