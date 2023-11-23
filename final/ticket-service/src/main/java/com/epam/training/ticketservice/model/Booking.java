@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 public class Booking {
 
     @Id
@@ -44,11 +46,6 @@ public class Booking {
         this.account = account;
         this.screening = screening;
         this.seats = seats;
-    }
-
-    public Booking(Screening screening, List<Seat> seats, int price) {
-        this.screening = screening;
-        this.seats = seats;
-        this.price = price;
+        price = 1500;
     }
 }

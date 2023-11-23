@@ -35,6 +35,10 @@ public class Screening {
     @Column(name = "date")
     private LocalDateTime date;
 
+    @ManyToOne
+    @JoinColumn(name = "component_id", referencedColumnName = "id")
+    private PriceComponent priceComponent;
+
     public Screening(Movie movie, Room room, LocalDateTime date) {
         this.movie = movie;
         this.room = room;

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,48 +46,6 @@ public class BookingServiceImpl implements BookingService {
         }
         return bookingRepository.findAllByAccount(account.get()).stream().map(BookingDto::new).toList();
     }
-
-    public Booking getBookingForGetPrice(String movieTitle,
-                                         String roomName,
-                                         LocalDateTime startDate,
-                                         String seatListString) throws NotFoundException {
-        var movie = movieRepository.findByTitle(movieTitle);
-        if (movie.isEmpty()) {
-            throw new NotFoundException(MOVIE_NOT_FOUND);
-        }
-
-        var room = roomRepository.findByName(roomName);
-        if (room.isEmpty()) {
-            throw new NotFoundException(ROOM_NOT_FOUND);
-        }
-
-        var screening = screeningRepository.findScreeningByMovieAndRoomAndDate(movie.get(), room.get(), startDate);
-        if (screening.isEmpty()) {
-            throw new NotFoundException(SCREENING_NOT_FOUND);
-        }
-
-        List<Seat> seatsToBook = new ArrayList<>();
-
-        Arrays.stream(seatListString.split(" "))
-                .forEach(x -> {
-                    List<String> seatSpot = Arrays.asList(x.split(","));
-                    seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
-                });
-
-        return new Booking(screening.get(), seatsToBook, calculator.calculate(screening.get(), seatsToBook.size()));
-    }
-
-    @Override
-    public int getPrice(String movieTitle, String roomName, LocalDateTime startDate, String seatListString)
-            throws NotFoundException {
-
-        Booking booking = getBookingForGetPrice(movieTitle, roomName, startDate, seatListString);
-        if (!isBookingValid(booking) || booking.getScreening() == null) {
-            throw new NotFoundException("Not a valid booking");
-        }
-        return booking.getPrice();
-    }
-
 
     @Override
     public void createBooking(String movieTitle,
@@ -127,95 +84,23 @@ public class BookingServiceImpl implements BookingService {
         );
         booking.setPrice(calculator.calculate(screening.get(), seatList.size()));
 
-        if (isBookingValid(booking)) {
+        if (canBooking(booking)) {
             bookingRepository.save(booking);
         }
 
     }
-    /*
-    @Override
-    public void createBooking(String movieTitle,
-                              String roomName,
-                              LocalDateTime startTime,
-                              String seatListString,
-                              AccountDto accountDto) throws NotFoundException, SeatAlreadyTakenException {
-        var movie = movieRepository.findByTitle(movieTitle);
-        if (movie.isEmpty()) {
-            throw new NotFoundException(MOVIE_NOT_FOUND);
-        }
 
-        var room = roomRepository.findByName(roomName);
-        if (room.isEmpty()) {
-            throw new NotFoundException(ROOM_NOT_FOUND);
-        }
-
-        var screening = screeningRepository.findScreeningByMovieAndRoomAndDate(movie.get(), room.get(), startTime);
-        if (screening.isEmpty()) {
-            throw new NotFoundException(SCREENING_NOT_FOUND);
-        }
-
-        List<Seat> seatList = new ArrayList<>();
-        List<Seat> seatListInBooking = new ArrayList<>();
-        String[] seatsInString = seatListString.split(" ");
-        for (String item : seatsInString) {
-            String[] s = item.split(",");
-            if (room.get().getNumberOfRows() < Integer.parseInt(s[0])
-                    || room.get().getNumberOfColumns() < Integer.parseInt(s[1])) {
-                String seatNotFound =
-                        "Seat ("
-                        + Integer.parseInt(s[0])
-                        + "," + Integer.parseInt(s[1])
-                        + ") does not exist in this room";
-                throw new NotFoundException(seatNotFound);
-            }
-
-            seatList.add(new Seat(Integer.parseInt(s[0]), Integer.parseInt(s[1])));
-        }
-
-        List<Booking> bookingList = bookingRepository.findAllByScreening(screening.get()).stream().toList();
-
-        for (Booking itemForSeats : bookingList) {
-            List<Seat> seatsInRepo = itemForSeats.getSeats();
-            seatListInBooking.addAll(seatsInRepo);
-        }
-
-        for (Seat seat : seatList) {
-            if (seatListInBooking.contains(seat)) {
-                throw new SeatAlreadyTakenException("Seat ("
-                        + seat.getRowIndex() + "," + seat.getColumnIndex()
-                        + ") is already taken");
-            }
-        }
-
-        Optional<Account> account = accountRepository.findByUsername(accountDto.username());
-        if (account.isEmpty()) {
-            throw new NotFoundException(ACCOUNT_NOT_FOUND);
-        }
-
-        //?????????
-        if (account.get().getAccountType().equals(AccountType.ADMIN)) {
-            return;
-        }
-        Booking booking = new Booking(
-                account.get(),
-                screening.get(),
-                seatList
-        );
-        bookingRepository.save(booking);
-    }
-
-     */
-    private boolean isBookingValid(Booking booking) throws NotFoundException {
+    public boolean canBooking(Booking booking) throws NotFoundException {
 
         List<Booking> bookingsAtPlace = bookingRepository.findAllByScreening_MovieAndScreening_RoomAndScreening_Date(
                 booking.getScreening().getMovie(),
                 booking.getScreening().getRoom(),
                 booking.getScreening().getDate());
 
-        return isSeatPresent(booking) && isSeatNotBooked(booking, bookingsAtPlace);
+        return isSeatExists(booking) && isSeatNotBooked(booking, bookingsAtPlace);
     }
 
-    private boolean isSeatPresent(Booking booking) throws NotFoundException {
+    private boolean isSeatExists(Booking booking) throws NotFoundException {
 
         List<Seat> notExistentSeatsInRoom = booking.getSeats()
                 .stream().filter(x -> x.getRowIndex() > booking.getScreening()
@@ -239,7 +124,6 @@ public class BookingServiceImpl implements BookingService {
             for (String s : seatList) {
                 sb.append(s);
             }
-            //sb.delete(sb.length(), sb.length() - 2).append(" does not exist in this room");
             sb.append(" does not exist in this room");
             String seatNotFound = sb.toString();
             throw new NotFoundException(seatNotFound);
@@ -268,7 +152,6 @@ public class BookingServiceImpl implements BookingService {
             for (String s : seatList) {
                 sb.append(s);
             }
-            //sb.delete(sb.length(), sb.length() - 2).append(" is already taken");
             sb.append(" is already taken");
             String seatNotFound = sb.toString();
             throw new NotFoundException(seatNotFound);

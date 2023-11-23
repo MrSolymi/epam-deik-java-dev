@@ -80,9 +80,7 @@ public class PriceComponentCommands {
                                              String roomName,
                                              String startDate) {
         try {
-            priceComponentService.priceComponentToScreening(componentName,
-                    movieTitle,
-                    roomName,
+            priceComponentService.priceComponentToScreening(componentName, movieTitle, roomName,
                     LocalDateTime.parse(startDate, formatter));
         } catch (Exception e) {
             return e.getMessage();
@@ -90,16 +88,16 @@ public class PriceComponentCommands {
         return "Successfully attached the " + componentName + " component to screening";
     }
 
-    @ShellMethod(
+    @ShellMethod(group = "Booking Commands",
             key = "show price for",
             value = "show price for <title of movie> "
                     + "<name of room> <screening staring time in YYYY-MM-DD hh:mm format> "
                     + "<list of seats separated by space key, seats in \"<row>,<column>\" format")
-    public String getPrice(String movieTitle, String roomName, String startDate, String seatListString) {
+    public String getPrice(String movieTitle, String roomName, String startDate, String seatListInString) {
         int price = 0;
         try {
-            price = bookingService.getPrice(movieTitle, roomName,
-                    LocalDateTime.parse(startDate, formatter), seatListString);
+            price = priceComponentService.getPrice(movieTitle, roomName, LocalDateTime.parse(startDate, formatter),
+                    seatListInString);
         } catch (Exception e) {
             return e.getMessage();
         }

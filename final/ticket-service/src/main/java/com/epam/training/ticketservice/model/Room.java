@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,8 +32,9 @@ public class Room {
     @Column(name = "number_of_rows")
     private int numberOfColumns;
 
-    @OneToMany(mappedBy = "room", cascade = {CascadeType.REMOVE})
-    private List<Screening> screenings;
+    @ManyToOne
+    @JoinColumn(name = "component_id", referencedColumnName = "id")
+    private PriceComponent priceComponent;
 
     public Room(String name, int numberOfRows, int numberOfColumns) {
         this.name = name;

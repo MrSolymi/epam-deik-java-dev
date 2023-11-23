@@ -11,12 +11,14 @@ import com.epam.training.ticketservice.services.ScreeningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ScreeningServiceImpl implements ScreeningService {
     private static final String SCREENING_NOT_FOUND =
             "The screening with the given data is not found";

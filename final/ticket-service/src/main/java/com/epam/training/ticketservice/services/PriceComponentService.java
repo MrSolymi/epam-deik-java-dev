@@ -11,17 +11,17 @@ public interface PriceComponentService {
 
     void createPriceComponent(String componentName, int componentValue) throws AlreadyExistsException;
 
+    int getPrice(String movieTitle, String roomName, LocalDateTime dateTime, String seatListInString)
+            throws NotFoundException;
+
+    int getPrice(Screening screening);
 
     void priceComponentToRoom(String componentName, String roomName) throws NotFoundException;
 
-
-    void priceComponentToMovie(String componentName, String movieTitle) throws NotFoundException;
-
+    void priceComponentToMovie(String componentName, String roomName) throws NotFoundException;
 
     void priceComponentToScreening(String componentName,
                                    String movieTitle,
                                    String roomName,
-                                   LocalDateTime startingTime) throws NotFoundException;
-
-    int getPriceForCalculator(Screening screening);
+                                   LocalDateTime dateTime) throws NotFoundException;
 }
