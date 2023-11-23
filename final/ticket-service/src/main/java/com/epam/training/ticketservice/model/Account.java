@@ -22,16 +22,13 @@ import java.util.List;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_name", unique = true)
+    @Column(unique = true)
     private String username;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 

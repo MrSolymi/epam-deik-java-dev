@@ -15,7 +15,7 @@ public class Calculator {
     private static int basePrice = 1500;
 
     public int calculate(Screening screening, int numberOfTickets) {
-        return numberOfTickets * (basePrice + priceComponentService.getPrice(screening));
+        return numberOfTickets * (basePrice + priceComponentService.calculateAdditionalPrices(screening));
     }
 
     public static void setBasePrice(int basePrice) {

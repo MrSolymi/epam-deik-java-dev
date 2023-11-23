@@ -17,8 +17,10 @@ import com.epam.training.ticketservice.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,6 +100,46 @@ public class BookingServiceImpl implements BookingService {
                 booking.getScreening().getDate());
 
         return isSeatExists(booking) && isSeatNotBooked(booking, bookingsAtPlace);
+    }
+
+    @Transactional
+    @Override
+    public int showPrice(String movieTitle, String roomName, LocalDateTime dateTime, String seatListInString)
+            throws NotFoundException {
+
+        var movie = movieRepository.findByTitle(movieTitle);
+        if (movie.isEmpty()) {
+            throw new NotFoundException(MOVIE_NOT_FOUND);
+        }
+        var room = roomRepository.findByName(roomName);
+        if (room.isEmpty()) {
+            throw new NotFoundException(ROOM_NOT_FOUND);
+        }
+        var screening = screeningRepository.findScreeningByMovieAndRoomAndDate(movie.get(), room.get(), dateTime);
+        if (screening.isEmpty()) {
+            throw new NotFoundException(SCREENING_NOT_FOUND);
+        }
+
+
+
+        List<Seat> seatsToBook = new ArrayList<>();
+
+
+        Arrays.stream(seatListInString.split(" "))
+                .forEach(x -> {
+                    List<String> seatSpot = Arrays.asList(x.split(","));
+                    seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
+                });
+
+
+        Booking booking =
+                new Booking(screening.get(), seatsToBook, calculator.calculate(screening.get(), seatsToBook.size()));
+
+        if (!canBooking(booking) || booking.getScreening() == null) {
+            throw new NotFoundException("The booking is not valid");
+        }
+
+        return booking.getPrice();
     }
 
     private boolean isSeatExists(Booking booking) throws NotFoundException {

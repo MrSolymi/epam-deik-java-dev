@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,16 +21,13 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title", unique = true)
+    @Column(unique = true)
     private String title;
 
-    @Column(name = "type")
     private String type;
 
-    @Column(name = "length")
     private int length;
 
     @ManyToOne

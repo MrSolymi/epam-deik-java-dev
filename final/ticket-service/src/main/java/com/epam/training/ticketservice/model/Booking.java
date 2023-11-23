@@ -20,12 +20,10 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
-@Builder
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne
@@ -39,7 +37,6 @@ public class Booking {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Seat> seats;
 
-    @Column(name = "price")
     private int price;
 
     public Booking(Account account, Screening screening, List<Seat> seats) {
@@ -47,5 +44,12 @@ public class Booking {
         this.screening = screening;
         this.seats = seats;
         price = 1500;
+    }
+
+    public Booking(Screening screening, List<Seat> seats, int price) {
+        this.account = null;
+        this.screening = screening;
+        this.seats = seats;
+        this.price = price;
     }
 }

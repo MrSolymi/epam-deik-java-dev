@@ -11,10 +11,12 @@ import com.epam.training.ticketservice.repositories.MovieRepository;
 import com.epam.training.ticketservice.repositories.PriceComponentRepository;
 import com.epam.training.ticketservice.repositories.RoomRepository;
 import com.epam.training.ticketservice.repositories.ScreeningRepository;
+import com.epam.training.ticketservice.services.BookingService;
 import com.epam.training.ticketservice.services.PriceComponentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,9 +39,6 @@ public class PriceComponentServiceImpl implements PriceComponentService {
     private final MovieRepository movieRepository;
     private final ScreeningRepository screeningRepository;
 
-    private final BookingServiceImpl bookingServiceImpl;
-
-    private final Calculator calculator;
 
     @Override
     public void createPriceComponent(String componentName, int componentValue) throws AlreadyExistsException {
@@ -51,46 +50,9 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         priceComponentRepository.save(component.get());
     }
 
+    @Transactional
     @Override
-    public int getPrice(String movieTitle, String roomName, LocalDateTime dateTime, String seatListInString)
-            throws NotFoundException {
-        var movie = movieRepository.findByTitle(movieTitle);
-        if (movie.isEmpty()) {
-            throw new NotFoundException(MOVIE_NOT_FOUND);
-        }
-        var room = roomRepository.findByName(roomName);
-        if (room.isEmpty()) {
-            throw new NotFoundException(ROOM_NOT_FOUND);
-        }
-        var screening = screeningRepository.findScreeningByMovieAndRoomAndDate(movie.get(), room.get(), dateTime);
-        if (screening.isEmpty()) {
-            throw new NotFoundException(SCREENING_NOT_FOUND);
-        }
-
-        List<Seat> seatsToBook = new ArrayList<>();
-
-        Arrays.stream(seatListInString.split(" "))
-                .forEach(x -> {
-                    List<String> seatSpot = Arrays.asList(x.split(","));
-                    seatsToBook.add(new Seat(Integer.parseInt(seatSpot.get(0)), Integer.parseInt(seatSpot.get(1))));
-                });
-
-        Booking booking = Booking.builder()
-                .screening(screening.get())
-                .seats(seatsToBook)
-                .price(calculator.calculate(screening.get(), seatsToBook.size()))
-                .build();
-
-        if (!bookingServiceImpl.canBooking(booking) || booking.getScreening() == null) {
-            throw new NotFoundException("The booking is not valid");
-        }
-
-        return booking.getPrice();
-
-    }
-
-    @Override
-    public int getPrice(Screening screening) {
+    public int calculateAdditionalPrices(Screening screening) {
         int price = 0;
 
         List<PriceComponent> components = priceComponentRepository.findAll();
@@ -123,6 +85,7 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         return price;
     }
 
+    @Transactional
     @Override
     public void priceComponentToRoom(String componentName, String roomName) throws NotFoundException {
         Optional<PriceComponent> component = priceComponentRepository.findByComponentName(componentName);
@@ -134,10 +97,17 @@ public class PriceComponentServiceImpl implements PriceComponentService {
             throw new NotFoundException(ROOM_NOT_FOUND);
         }
 
+
+
         room.get().setPriceComponent(component.get());
+        var a = component.get().getRooms();
+        a.add(room.get());
+        component.get().setRooms(a);
+        priceComponentRepository.save(component.get());
         roomRepository.save(room.get());
     }
 
+    @Transactional
     @Override
     public void priceComponentToMovie(String componentName, String movieTitle) throws NotFoundException {
         Optional<PriceComponent> component = priceComponentRepository.findByComponentName(componentName);

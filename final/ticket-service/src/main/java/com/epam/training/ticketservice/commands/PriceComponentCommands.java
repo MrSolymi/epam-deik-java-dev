@@ -2,9 +2,7 @@ package com.epam.training.ticketservice.commands;
 
 import com.epam.training.ticketservice.components.Calculator;
 import com.epam.training.ticketservice.dto.AccountDto;
-import com.epam.training.ticketservice.dto.BookingDto;
 import com.epam.training.ticketservice.model.AccountType;
-import com.epam.training.ticketservice.model.Booking;
 import com.epam.training.ticketservice.services.AccountService;
 import com.epam.training.ticketservice.services.BookingService;
 import com.epam.training.ticketservice.services.PriceComponentService;
@@ -88,15 +86,14 @@ public class PriceComponentCommands {
         return "Successfully attached the " + componentName + " component to screening";
     }
 
-    @ShellMethod(group = "Booking Commands",
-            key = "show price for",
+    @ShellMethod(group = "Booking Commands", key = "show price for",
             value = "show price for <title of movie> "
                     + "<name of room> <screening staring time in YYYY-MM-DD hh:mm format> "
                     + "<list of seats separated by space key, seats in \"<row>,<column>\" format")
-    public String getPrice(String movieTitle, String roomName, String startDate, String seatListInString) {
+    public String showPrice(String movieTitle, String roomName, String startDate, String seatListInString) {
         int price = 0;
         try {
-            price = priceComponentService.getPrice(movieTitle, roomName, LocalDateTime.parse(startDate, formatter),
+            price = bookingService.showPrice(movieTitle, roomName, LocalDateTime.parse(startDate, formatter),
                     seatListInString);
         } catch (Exception e) {
             return e.getMessage();
