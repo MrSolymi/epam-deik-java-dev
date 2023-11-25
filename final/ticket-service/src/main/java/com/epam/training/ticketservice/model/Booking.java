@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 public class Booking {
 
     @Id

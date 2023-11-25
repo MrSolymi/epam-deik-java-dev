@@ -1,25 +1,21 @@
 package com.epam.training.ticketservice.services.impl;
 
-import com.epam.training.ticketservice.components.Calculator;
 import com.epam.training.ticketservice.exceptions.AlreadyExistsException;
 import com.epam.training.ticketservice.exceptions.NotFoundException;
-import com.epam.training.ticketservice.model.Booking;
+import com.epam.training.ticketservice.model.Movie;
 import com.epam.training.ticketservice.model.PriceComponent;
+import com.epam.training.ticketservice.model.Room;
 import com.epam.training.ticketservice.model.Screening;
-import com.epam.training.ticketservice.model.Seat;
 import com.epam.training.ticketservice.repositories.MovieRepository;
 import com.epam.training.ticketservice.repositories.PriceComponentRepository;
 import com.epam.training.ticketservice.repositories.RoomRepository;
 import com.epam.training.ticketservice.repositories.ScreeningRepository;
-import com.epam.training.ticketservice.services.BookingService;
 import com.epam.training.ticketservice.services.PriceComponentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,10 +96,9 @@ public class PriceComponentServiceImpl implements PriceComponentService {
 
 
         room.get().setPriceComponent(component.get());
-        var a = component.get().getRooms();
-        a.add(room.get());
-        component.get().setRooms(a);
-        priceComponentRepository.save(component.get());
+        List<Room> rooms = component.get().getRooms();
+        rooms.add(room.get());
+        component.get().setRooms(rooms);
         roomRepository.save(room.get());
     }
 
@@ -120,6 +115,9 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         }
 
         movie.get().setPriceComponent(component.get());
+        List<Movie> movies = component.get().getMovies();
+        movies.add(movie.get());
+        component.get().setMovies(movies);
         movieRepository.save(movie.get());
     }
 
@@ -147,6 +145,9 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         }
 
         screening.get().setPriceComponent(component.get());
+        List<Screening> screenings = component.get().getScreenings();
+        screenings.add(screening.get());
+        component.get().setScreenings(screenings);
         screeningRepository.save(screening.get());
     }
 }

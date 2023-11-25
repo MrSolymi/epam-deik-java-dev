@@ -69,10 +69,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void signUp(String username, String password) throws AlreadyExistsException {
         Account account = new Account(username, password, AccountType.USER);
-        if (accountRepository.findByUsername(username).isEmpty()) {
-            accountRepository.save(account);
-        } else {
+        if (accountRepository.findByUsername(username).isPresent()) {
             throw new AlreadyExistsException(USERNAME_ALREADY_EXIST);
+        } else {
+            accountRepository.save(account);
         }
 
     }

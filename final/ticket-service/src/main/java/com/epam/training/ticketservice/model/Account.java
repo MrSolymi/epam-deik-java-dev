@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
