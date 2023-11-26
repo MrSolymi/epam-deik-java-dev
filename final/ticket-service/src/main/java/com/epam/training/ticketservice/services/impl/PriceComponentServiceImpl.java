@@ -121,6 +121,7 @@ public class PriceComponentServiceImpl implements PriceComponentService {
         movieRepository.save(movie.get());
     }
 
+    @Transactional
     @Override
     public void priceComponentToScreening(String componentName,
                                           String movieTitle,

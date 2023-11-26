@@ -82,7 +82,7 @@ public class ScreeningServiceImpl implements ScreeningService {
         screeningRepository.delete(screening.get());
     }
 
-    private void overlapValidate(Screening screening) throws ScreeningOverlappingException {
+    public void overlapValidate(Screening screening) throws ScreeningOverlappingException {
         var listScreenings = screeningRepository.findAllByRoom(screening.getRoom());
         if (listScreenings.isEmpty()) {
             return;

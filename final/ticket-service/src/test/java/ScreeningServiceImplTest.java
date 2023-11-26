@@ -16,10 +16,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -211,5 +209,30 @@ public class ScreeningServiceImplTest {
         assertDoesNotThrow(() -> screeningService.deleteScreening(existingMovieTitle, existingRoomName, startTime));
 
         verify(screeningRepository).delete(existingScreening);
+    }
+
+    @Test
+    public void testOverlapValidate_Overlap() {
+        Movie movie = new Movie("Movie 1", "Action", 120);
+        Room room = new Room("Room 1", 10, 10);
+
+        Screening previousScreening = new Screening(
+                movie,
+                room,
+                LocalDateTime.parse("2023-01-01 10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
+
+        Screening screening = new Screening(
+                movie,
+                room,
+                LocalDateTime.parse("2023-01-01 10:10", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
+
+        List<Screening> screenings = new ArrayList<>();
+        screenings.add(previousScreening);
+
+        when(screeningRepository.findAllByRoom(room)).thenReturn(screenings);
+
+        assertThrows(ScreeningOverlappingException.class, () -> screeningService.overlapValidate(screening));
     }
 }

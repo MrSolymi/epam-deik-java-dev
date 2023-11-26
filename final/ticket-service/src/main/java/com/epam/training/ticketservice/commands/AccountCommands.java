@@ -44,10 +44,13 @@ public class AccountCommands {
     }
 
     @ShellMethod(key = "sign out", value = "Sign out")
-    public void signOut() {
-        accountService.logOut()
-                .map(accountDto -> accountDto.username() + " is logged out")
-                .orElse("You need to login first");
+    public String signOut() {
+        var a = accountService.logOut();
+        if (a.isEmpty()) {
+            return "You need to login first";
+        } else {
+            return a.get().username() + " is logged out";
+        }
     }
 
     @ShellMethod(key = "describe account", value = "describe account")
